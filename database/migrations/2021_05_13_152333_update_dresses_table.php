@@ -29,7 +29,10 @@ class UpdateDressesTable extends Migration
     public function down()
     {
         Schema::table('dresses', function (Blueprint $table) {
-            //
+            $table->dropColumn('description');
+            $table->dropColumn('size');
+            $table->dropColumn('color');
+            $table->dropColumn('price');
         });
     }
 }
