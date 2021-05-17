@@ -43,6 +43,14 @@ class DressController extends Controller
         $data = $request->all();
 
         $new_dress = new Dress();
+        
+        $request->validate([
+            'name' => 'required|max:20',
+            'size' => 'required|max:3',
+            'color' => 'required|max:20',
+            'description' => 'required|max:100',
+            'price' => 'required|numeric'
+        ]);
 
         $new_dress->name = $data['name'];
         $new_dress->size = $data['size'];
@@ -51,6 +59,7 @@ class DressController extends Controller
         $new_dress->price = $data['price'];
 
         $new_dress->save();
+
 
         return redirect()->route('vestiti.index');
     }
@@ -81,9 +90,12 @@ class DressController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Dress $vestiti)
     {
-        //
+
+        //$dress_to_update = Dress::findOrFail($id);
+        //@dd($dress_to_update);
+        return view('dresses.edit', compact('vestiti'));
     }
 
     /**
@@ -93,9 +105,12 @@ class DressController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Dress $vestiti)
     {
-        //
+        $data = $request->all();
+        $vestiti->update($data);
+
+        return redirect()->route('vestiti.index');
     }
 
     /**
@@ -104,8 +119,10 @@ class DressController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Dress $vestiti)
     {
-        //
+        $vestiti->delete();
+
+        return redirect()->route('vestiti.index');
     }
 }
